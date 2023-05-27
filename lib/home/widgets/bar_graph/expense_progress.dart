@@ -21,51 +21,72 @@ class ExpenseProgress extends StatelessWidget {
 
     final percent = amount / maxAmount;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          NumberFormat.simpleCurrency(
-            name: '₱',
-            decimalDigits: 0,
-          ).format(amount),
-          style: Theme.of(context).textTheme.headlineLarge,
-        ),
-        const Spacer(),
-        Expanded(
-          flex: 15,
-          child: Stack(
-            children: [
-              //background
-              Container(
-                width: maxWidth,
-                height: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.5),
-                  borderRadius: borderRadius,
-                ),
-              ),
-              //foreground
-              FractionallySizedBox(
-                heightFactor: percent > 0.05 ? percent : 0.05,
-                child: Container(
+    double updateProgress() {
+      if (percent > 0.05) {
+        return percent;
+      } else {
+        if (percent > 0) {
+          return 0.05;
+        } else {
+          return 0;
+        }
+      }
+    }
+
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.105,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 40,
+            ),
+            child: Text(
+              NumberFormat.simpleCurrency(
+                name: '₱',
+                decimalDigits: 0,
+              ).format(amount),
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+          ),
+          const Spacer(),
+          Expanded(
+            flex: 15,
+            child: Stack(
+              children: [
+                //background
+                Container(
                   width: maxWidth,
                   height: double.infinity,
                   decoration: BoxDecoration(
-                    color: kAscentColor,
+                    color: Colors.grey.withOpacity(0.5),
                     borderRadius: borderRadius,
                   ),
                 ),
-              ),
-            ],
+                //foreground
+                FractionallySizedBox(
+                  heightFactor: updateProgress(),
+                  child: Container(
+                    width: maxWidth,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      color: kAscentColor,
+                      borderRadius: borderRadius,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        const Spacer(),
-        Text(
-          DateFormat.E().format(date),
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-      ],
+          const Spacer(),
+          Text(
+            DateFormat.E().format(date),
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+        ],
+      ),
     );
   }
 }

@@ -31,12 +31,12 @@ class DefaultTheme {
     return const TextTheme(
       headlineLarge: TextStyle(
         fontFamily: 'Quicksand-Bold',
-        fontSize: 14,
+        fontSize: 12,
         fontWeight: FontWeight.bold,
       ),
       headlineMedium: TextStyle(
         fontFamily: 'Quicksand-Regular',
-        fontSize: 12,
+        fontSize: 10,
       ),
     );
   }

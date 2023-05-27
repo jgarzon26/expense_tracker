@@ -1,9 +1,14 @@
 import 'package:expense_tracker/constants.dart';
+import 'package:expense_tracker/date_data.dart';
+import 'package:expense_tracker/providers/transaction_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/home/widgets/bar_graph/expense_progress.dart';
+import 'package:provider/provider.dart';
 
 class ExpenseChart extends StatelessWidget {
   const ExpenseChart({super.key});
+
+  final maxAmount = 10000.0;
 
   @override
   Widget build(BuildContext context) {
@@ -12,26 +17,35 @@ class ExpenseChart extends StatelessWidget {
         vertical: kDefaultPadding + 10,
       ),
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.2,
+        padding: const EdgeInsets.symmetric(
+            horizontal: kDefaultPadding, vertical: kDefaultPadding),
+        height: MediaQuery.of(context).size.height * 0.15,
         width: MediaQuery.of(context).size.width * 0.8,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(kDefaultBorderRadius),
           boxShadow: kDefaultBoxShadow,
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(kDefaultPadding),
-          child: Row(
-            //temporary
-            children: [
-              ExpenseProgress(
-                amount: 5000,
-                date: DateTime.now(),
-                maxAmount: 10000,
-              ),
-            ],
-          ),
-        ),
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: dates.length,
+            itemBuilder: (context, index) {
+              final transactionProvider = context.watch<TransactionProvider>();
+              if (transactionProvider.transactions.isEmpty) {
+                return ExpenseProgress(
+                  amount: 0,
+                  date: dates[index],
+                  maxAmount: maxAmount,
+                );
+              } else {
+                return ExpenseProgress(
+                  amount: transactionProvider.transactions[0].amount,
+                  date: dates[index],
+                  maxAmount: maxAmount,
+                );
+              }
+            }),
       ),
     );
   }
