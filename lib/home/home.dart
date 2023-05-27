@@ -1,4 +1,5 @@
 import 'package:expense_tracker/home/widgets/bar_graph/expense_chart.dart';
+import 'package:expense_tracker/home/widgets/transaction_list/transaction_pane.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
@@ -21,6 +22,7 @@ class Home extends StatelessWidget {
         child: Column(
           children: const [
             ExpenseChart(),
+            TransactionPane(),
           ],
         ),
       ),
