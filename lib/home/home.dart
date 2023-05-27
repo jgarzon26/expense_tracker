@@ -1,4 +1,4 @@
-import 'package:expense_tracker/home/widgets/expense_chart.dart';
+import 'package:expense_tracker/home/widgets/bar_graph/expense_chart.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
@@ -16,11 +16,13 @@ class Home extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: const [
-          ExpenseChart(),
-        ],
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: Column(
+          children: const [
+            ExpenseChart(),
+          ],
+        ),
       ),
     );
   }
