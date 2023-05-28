@@ -5,6 +5,10 @@ class DefaultTheme {
   static ThemeData buildThemeData() {
     return ThemeData(
       appBarTheme: _buildAppBarThemeData(),
+      colorScheme: const ColorScheme.light(
+        primary: kAscentColor,
+        secondary: kPrimaryColor,
+      ),
       floatingActionButtonTheme: _buildFloatingActionButtonTheme(),
       textTheme: _buildTextTheme(),
       scaffoldBackgroundColor: Colors.white,
@@ -42,8 +46,8 @@ class DefaultTheme {
   }
 
   static FloatingActionButtonThemeData _buildFloatingActionButtonTheme() {
-    return const FloatingActionButtonThemeData(
-      backgroundColor: Color.fromARGB(255, 97, 74, 17),
+    return FloatingActionButtonThemeData(
+      backgroundColor: Colors.yellow.shade700,
       foregroundColor: Colors.black,
     );
   }

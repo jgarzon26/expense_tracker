@@ -53,12 +53,17 @@ class TransactionPane extends StatelessWidget {
 
   SliverList buildTransactions(UnmodifiableListView<Transaction> transactions) {
     return SliverList(
-      delegate:
-          SliverChildBuilderDelegate((context, index) => TransactionListTile(
-                amount: transactions[index].amount,
-                title: transactions[index].title,
-                date: transactions[index].date,
-              )),
+      delegate: SliverChildBuilderDelegate(
+        childCount: transactions.length,
+        (context, index) {
+          print(transactions.length);
+          return TransactionListTile(
+            amount: transactions[index].amount,
+            title: transactions[index].title,
+            date: transactions[index].date,
+          );
+        },
+      ),
     );
   }
 }
