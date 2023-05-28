@@ -156,13 +156,15 @@ class _InputTransactionState extends State<InputTransaction> {
             child: ElevatedButton(
               onPressed: _titleController.text.isNotEmpty && dateValue != null
                   ? () {
-                      context.read<TransactionProvider>().addAndUpdateTransaction(
-                        transaction: Transaction(
-                          title: _titleController.text,
-                          amount: amountValue,
-                          date: dateValue!,
-                        ),
-                      );
+                      context
+                          .read<TransactionProvider>()
+                          .addAndUpdateTransaction(
+                            transaction: Transaction(
+                              title: _titleController.text,
+                              amount: amountValue,
+                              date: dateValue!,
+                            ),
+                          );
                       Navigator.of(context).pop();
                     }
                   : null,

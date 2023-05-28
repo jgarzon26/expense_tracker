@@ -1,19 +1,19 @@
+import 'dart:collection';
+
+import 'package:expense_tracker/classes/transaction.dart';
 import 'package:expense_tracker/providers/transaction_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/constants.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class TransactionListTile extends StatelessWidget {
   const TransactionListTile({
     super.key,
-    required this.amount,
-    required this.title,
-    required this.date,
+    required this.transaction,
   });
 
-  final double amount;
-  final String title;
-  final DateTime date;
+  final Transaction transaction;
 
   @override
   Widget build(BuildContext context) {
@@ -37,21 +37,21 @@ class TransactionListTile extends StatelessWidget {
             child: Text(
               NumberFormat.simpleCurrency(
                 name: '₱',
-              ).format(amount),
+              ).format(transaction.amount),
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     color: Colors.white,
                   ),
             ),
           ),
           title: Text(
-            title,
+            transaction.title,
             style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                   fontSize: 14,
                 ),
           ),
           subtitle: Text(
             DateFormat.yMMMMd().format(
-              date,
+              transaction.date,
             ),
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   fontSize: 12,
@@ -62,7 +62,11 @@ class TransactionListTile extends StatelessWidget {
               Icons.delete,
               color: Colors.red,
             ),
-            onPressed: () {},
+            onPressed: () {
+              context.read<TransactionProvider>().removeTransaction(
+                    transaction: transaction,
+                  );
+            },
           ),
         ),
       ),
