@@ -18,13 +18,15 @@ class TransactionProvider extends ChangeNotifier {
   UnmodifiableListView<Transaction> get chartTransactions => 
     UnmodifiableListView(_chartTransactions);
 
-  void addTransaction(Transaction transaction) {
+  void addAndUpdateTransaction(Transaction transaction) {
     _transactions.add(transaction);
+    _chartTransactions[transaction.date.day - 1].amount += transaction.amount;
     notifyListeners();
   }
 
   void removeTransaction(Transaction transaction) {
     _transactions.remove(transaction);
+    _chartTransactions[transaction.date.day - 1].amount = 0;
     notifyListeners();
   }
 }

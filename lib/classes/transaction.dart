@@ -3,7 +3,7 @@ import 'package:uuid/uuid.dart';
 class Transaction {
   final String id = const Uuid().v4();
   final String title;
-  final double amount;
+  double amount;
   final DateTime date;
 
   Transaction({
