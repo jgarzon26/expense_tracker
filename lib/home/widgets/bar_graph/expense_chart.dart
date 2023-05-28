@@ -35,7 +35,7 @@ class ExpenseChart extends StatelessWidget {
               return ExpenseProgress(
                 amount: transactionProvider.chartTransactions[index].amount,
                 date: transactionProvider.chartTransactions[index].date,
-                maxAmount: maxAmount,
+                maxAmount: transactionProvider.maxAmount,
               );
             }),
       ),

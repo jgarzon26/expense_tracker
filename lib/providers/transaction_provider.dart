@@ -8,25 +8,37 @@ class TransactionProvider extends ChangeNotifier {
   UnmodifiableListView<Transaction> get transactions =>
       UnmodifiableListView(_transactions);
 
-  final List<Transaction> _chartTransactions =
-      List.generate(dates.length, (index) => 
-      Transaction.forChart(
-        amount: 0, 
-        date: dates[index],
-        )
-      );
-  UnmodifiableListView<Transaction> get chartTransactions => 
-    UnmodifiableListView(_chartTransactions);
+  final List<Transaction> _chartTransactions = List.generate(
+      dates.length,
+      (index) => Transaction.forChart(
+            amount: 0,
+            date: dates[index],
+          ));
+  UnmodifiableListView<Transaction> get chartTransactions =>
+      UnmodifiableListView(_chartTransactions);
 
-  void addAndUpdateTransaction(Transaction transaction) {
+  double maxAmount = 10000.0;
+
+  void addAndUpdateTransaction({required Transaction transaction}) {
     _transactions.add(transaction);
-    _chartTransactions[transaction.date.day - 1].amount += transaction.amount;
+    notifyListeners();
+    for (int i = 0; i < _chartTransactions.length; i++) {
+      if (_chartTransactions[i].date.day == transaction.date.day) {
+        _chartTransactions[i].amount += transaction.amount;
+        break;
+      }
+    }
     notifyListeners();
   }
 
-  void removeTransaction(Transaction transaction) {
+  void removeTransaction({required Transaction transaction}) {
     _transactions.remove(transaction);
-    _chartTransactions[transaction.date.day - 1].amount = 0;
+    for (int i = 0; i < _chartTransactions.length; i++) {
+      if (_chartTransactions[i].date.day == transaction.date.day) {
+        _chartTransactions[i].amount -= transaction.amount;
+        break;
+      }
+    }
     notifyListeners();
   }
 }
