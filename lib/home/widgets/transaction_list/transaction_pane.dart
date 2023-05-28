@@ -1,7 +1,8 @@
-import 'package:expense_tracker/constants.dart';
+import 'package:expense_tracker/classes/transaction.dart';
 import 'package:expense_tracker/providers/transaction_provider.dart';
+import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:expense_tracker/home/widgets/transaction_list/transaction_listtile.dart';
 import 'package:provider/provider.dart';
 
 class TransactionPane extends StatelessWidget {
@@ -9,77 +10,55 @@ class TransactionPane extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final transactionProvider = context.watch<TransactionProvider>();
+    final transactions = context.watch<TransactionProvider>().transactions;
     return CustomScrollView(
       shrinkWrap: true,
       slivers: [
-        TransactionListTile(transactionProvider: transactionProvider),
+        transactions.isEmpty
+            ? displayEmptyTransactionsInfo(context)
+            : buildTransactions(transactions),
       ],
     );
   }
-}
 
-class TransactionListTile extends StatelessWidget {
-  const TransactionListTile({
-    super.key,
-    required this.transactionProvider,
-  });
-
-  final TransactionProvider transactionProvider;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: kDefaultPadding,
-        vertical: kDefaultPadding,
-      ),
-      sliver: SliverToBoxAdapter(
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(kDefaultBorderRadius),
-            ),
-            color: Colors.white,
-            boxShadow: kDefaultBoxShadow,
-          ),
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: kAscentColor,
-              radius: 30,
-              child: Text(
-                NumberFormat.simpleCurrency(
-                  name: '₱',
-                ).format(transactionProvider.transactions[0].amount),
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: Colors.white,
-                    ),
-              ),
-            ),
-            title: Text(
-              transactionProvider.transactions[0].title,
+  SliverToBoxAdapter displayEmptyTransactionsInfo(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.3,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'No transactions added yet!',
               style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                    fontSize: 14,
+                    fontSize: 16,
+                    color: Colors.black,
                   ),
             ),
-            subtitle: Text(
-              DateFormat.yMMMMd().format(
-                transactionProvider.transactions[0].date,
-              ),
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontSize: 12,
-                  ),
+            const SizedBox(
+              height: 20,
             ),
-            trailing: IconButton(
-              icon: const Icon(
-                Icons.delete,
-                color: Colors.red,
+            Expanded(
+              child: Image.asset(
+                'assets/images/waiting.png',
+                fit: BoxFit.cover,
+                opacity: const AlwaysStoppedAnimation(0.3),
               ),
-              onPressed: () {},
             ),
-          ),
+          ],
         ),
       ),
+    );
+  }
+
+  SliverList buildTransactions(UnmodifiableListView<Transaction> transactions) {
+    return SliverList(
+      delegate:
+          SliverChildBuilderDelegate((context, index) => TransactionListTile(
+                amount: transactions[index].amount,
+                title: transactions[index].title,
+                date: transactions[index].date,
+              )),
     );
   }
 }

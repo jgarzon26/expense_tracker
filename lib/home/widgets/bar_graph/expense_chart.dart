@@ -12,6 +12,7 @@ class ExpenseChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final transactionProvider = context.watch<TransactionProvider>();
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: kDefaultPadding + 10,
@@ -29,22 +30,13 @@ class ExpenseChart extends StatelessWidget {
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: dates.length,
+            itemCount: transactionProvider.chartTransactions.length,
             itemBuilder: (context, index) {
-              final transactionProvider = context.watch<TransactionProvider>();
-              if (transactionProvider.transactions.isEmpty) {
-                return ExpenseProgress(
-                  amount: 0,
-                  date: dates[index],
-                  maxAmount: maxAmount,
-                );
-              } else {
-                return ExpenseProgress(
-                  amount: transactionProvider.transactions[0].amount,
-                  date: dates[index],
-                  maxAmount: maxAmount,
-                );
-              }
+              return ExpenseProgress(
+                amount: transactionProvider.chartTransactions[index].amount,
+                date: transactionProvider.chartTransactions[index].date,
+                maxAmount: maxAmount,
+              );
             }),
       ),
     );
