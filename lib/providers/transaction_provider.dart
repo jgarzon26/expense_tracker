@@ -33,6 +33,7 @@ class TransactionProvider extends ChangeNotifier {
 
   void removeTransaction({required Transaction transaction}) {
     _transactions.remove(transaction);
+    notifyListeners();
     for (int i = 0; i < _chartTransactions.length; i++) {
       if (_chartTransactions[i].date.day == transaction.date.day) {
         _chartTransactions[i].amount -= transaction.amount;
